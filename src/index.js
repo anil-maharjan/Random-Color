@@ -1,17 +1,64 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class ChangeButtonColor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      colors: {
+        backgroundColor: "",
+      },
+      history: [],
+    };
+  }
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+  handleClick() {
+    const history = this.state.history;
+    const colors = ["red", "blue", "green", "black", "orange"];
+    if (this.state.colors.backgroundColor === "blue") {
+      this.setState({
+        colors: {
+          backgroundColor: "green",
+        },
+        history: history.concat(["green"]),
+      });
+      return;
+    }
+    let a = Math.floor(Math.random() * 5);
+    this.setState({
+      colors: {
+        backgroundColor: colors[a],
+      },
+      history: history.concat([colors[a]]),
+    });
+  }
+
+  render() {
+    let styles;
+    return (
+      <div className="container">
+        <h1> Random Color Generator </h1>
+        <p>Click on the button to generate random colors</p>
+        <button
+          className="btn"
+          style={this.state.colors}
+          onClick={() => this.handleClick()}
+        >
+          Colors
+        </button>
+        <p>
+          Generated Color:
+          {this.state.history.map((color) => {
+            styles = {
+              color: color,
+            };
+            return <span style={styles}>{color + ", "}</span>;
+          })}
+        </p>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<ChangeButtonColor />, document.getElementById("root"));
